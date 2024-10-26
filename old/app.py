@@ -61,27 +61,23 @@ def index():
 
 @app.route('/Security', methods=['GET','POST'])
 def Security():
-    username = request.form.get('username')
-    password = request.form.get('password')
-        
-    # Consulta la base de datos para encontrar el administrador con el nombre de usuario dado
-    administrator = Administrator.query.filter_by(admin_user=username).first()
+    if request.method == 'GET':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-    # Verifica si el administrador existe y si la contraseña es correcta
-    if administrator and administrator.admin_password == password:
-        return redirect(url_for('register'))  # Redirige a la página de inicio si el inicio de sesión es exitoso
-    else:
-        return 'Invalid username or password'
+        # Consulta la base de datos para encontrar el administrador con el nombre de usuario dado
+        administrator = Administrator.query.filter_by(admin_user=username).first()
+
+        # Verifica si el administrador existe y si la contraseña es correcta
+        if administrator and administrator.admin_password == password:
+            return redirect(url_for('Register'))  # Redirige a la página de registro si el inicio de sesión es exitoso
+        else:
+            return 'Invalid username or password'
+
+        # Si es un GET, renderiza el formulario de inicio de sesión
+    return render_template('security.html')  # Asegúrate de que el archivo se llame security.html
     
-    #my damn knee is cracking
-@app.route('/register', methods=['POST'])
-def Register():
-    if request.method == 'POST':
-        # procesing forms data
-        print("procesing data..")
-    return render_template('register.html')
-
-
+    #my damn knee is crackin
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=8080, debug = True)
